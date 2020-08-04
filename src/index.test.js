@@ -1,7 +1,7 @@
-import { ExampleComponent } from '.'
+import { MaterialUiGroupCheckBox } from './MaterialUiGroupCheckBox'
 
-describe('ExampleComponent', () => {
+describe('MaterialUiGroupCheckBox', () => {
   it('is truthy', () => {
-    expect(ExampleComponent).toBeTruthy()
+    expect(MaterialUiGroupCheckBox).toBeTruthy()
   })
 })
