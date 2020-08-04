@@ -11,6 +11,7 @@ import AccordionSummary from '@material-ui/core/AccordionSummary'
 import Typography from '@material-ui/core/Typography'
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
 import { withStyles } from '@material-ui/core/styles'
+import { Grid } from '@material-ui/core'
 
 const styles = (theme) => ({
   root: {
@@ -114,33 +115,43 @@ class MaterialUiGroupCheckBox extends React.Component {
                   </AccordionSummary>
                   <AccordionDetails>
                     <FormGroup>
-                      {option.children &&
-                        option.children.map((childrenOption) => {
-                          let checked = false
-                          const label = this.getChildLabel(childrenOption)
-                          if (options.value) {
-                            checked = options.value.includes(
-                              this.getChildValue(childrenOption)
-                            )
-                          }
-                          return (
-                            <FormControlLabel
-                              key={`${options.name}FormControlLabel${label}`}
-                              control={
-                                <Checkbox
-                                  checked={checked}
-                                  onChange={(e) =>
-                                    this.handleChange(
-                                      e,
-                                      this.getChildValue(childrenOption)
-                                    )
+                      <Grid container>
+                        {option.children &&
+                          option.children.map((childrenOption) => {
+                            let checked = false
+                            const label = this.getChildLabel(childrenOption)
+                            if (options.value) {
+                              checked = options.value.includes(
+                                this.getChildValue(childrenOption)
+                              )
+                            }
+                            return (
+                              <Grid
+                                container
+                                item
+                                sm={12}
+                                md={6}
+                                lg={6}
+                                key={`${options.name}FormControlLabel${label}`}
+                              >
+                                <FormControlLabel
+                                  control={
+                                    <Checkbox
+                                      checked={checked}
+                                      onChange={(e) =>
+                                        this.handleChange(
+                                          e,
+                                          this.getChildValue(childrenOption)
+                                        )
+                                      }
+                                    />
                                   }
+                                  label={label}
                                 />
-                              }
-                              label={label}
-                            />
-                          )
-                        })}
+                              </Grid>
+                            )
+                          })}
+                      </Grid>
                     </FormGroup>
                   </AccordionDetails>
                 </Accordion>
