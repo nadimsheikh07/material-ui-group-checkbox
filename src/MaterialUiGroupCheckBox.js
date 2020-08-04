@@ -31,53 +31,53 @@ class MaterialUiGroupCheckBox extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      options: [],
-      selectedOptions: [],
+      items: [],
+      selectedItems: [],
       expanded: ''
     }
   }
 
   handleChange = (e, value) => {
     e.persist()
-    const { fieldData } = this.props
-    const selectedOptions = fieldData.value
+    const { options } = this.props
+    const selectedItems = options.value
 
     if (e.target.checked) {
-      selectedOptions.push(value)
+      selectedItems.push(value)
     } else {
-      const index = selectedOptions.indexOf(value)
+      const index = selectedItems.indexOf(value)
       if (index >= 0) {
-        selectedOptions.splice(index, 1)
+        selectedItems.splice(index, 1)
       }
     }
 
     const event = {
       target: {
-        name: fieldData.name,
-        value: selectedOptions
+        name: options.name,
+        value: selectedItems
       }
     }
     this.props.handleInputChange(event)
   }
 
   getLabel = (element) => {
-    const { fieldData } = this.props
-    return element[fieldData.getOptionLabel]
+    const { options } = this.props
+    return element[options.getOptionLabel]
   }
 
   getValue = (element) => {
-    const { fieldData } = this.props
-    return element[fieldData.getOptionValue]
+    const { options } = this.props
+    return element[options.getOptionValue]
   }
 
   getChildLabel = (element) => {
-    const { fieldData } = this.props
-    return element[fieldData.getChildOptionLabel]
+    const { options } = this.props
+    return element[options.getChildOptionLabel]
   }
 
   getChildValue = (element) => {
-    const { fieldData } = this.props
-    return element[fieldData.getChildOptionValue]
+    const { options } = this.props
+    return element[options.getChildOptionValue]
   }
 
   accordionHandleChange = (expanded) => {
@@ -85,19 +85,19 @@ class MaterialUiGroupCheckBox extends React.Component {
   }
 
   render() {
-    const { fieldData, classes, options } = this.props
+    const { options, classes, items } = this.props
     const { expanded } = this.state
 
     return (
       <React.Fragment>
-        <FormControl error={!!fieldData.error} fullWidth>
-          <FormLabel component='legend'>{fieldData.label}</FormLabel>
-          {options &&
-            options.map((option) => {
+        <FormControl error={!!options.error} fullWidth>
+          <FormLabel component='legend'>{options.label}</FormLabel>
+          {items &&
+            items.map((option) => {
               const mainLabel = this.getLabel(option)
               return (
                 <Accordion
-                  key={`${fieldData.name}Accordion${mainLabel}`}
+                  key={`${options.name}Accordion${mainLabel}`}
                   expanded={expanded === this.getValue(option)}
                   onChange={() =>
                     this.accordionHandleChange(this.getValue(option))
@@ -118,14 +118,14 @@ class MaterialUiGroupCheckBox extends React.Component {
                         option.children.map((childrenOption) => {
                           let checked = false
                           const label = this.getChildLabel(childrenOption)
-                          if (fieldData.value) {
-                            checked = fieldData.value.includes(
+                          if (options.value) {
+                            checked = options.value.includes(
                               this.getChildValue(childrenOption)
                             )
                           }
                           return (
                             <FormControlLabel
-                              key={`${fieldData.name}FormControlLabel${label}`}
+                              key={`${options.name}FormControlLabel${label}`}
                               control={
                                 <Checkbox
                                   checked={checked}
@@ -147,9 +147,7 @@ class MaterialUiGroupCheckBox extends React.Component {
               )
             })}
 
-          {fieldData.error && (
-            <FormHelperText>{fieldData.error}</FormHelperText>
-          )}
+          {options.error && <FormHelperText>{options.error}</FormHelperText>}
         </FormControl>
       </React.Fragment>
     )

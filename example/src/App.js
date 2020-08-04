@@ -2,7 +2,7 @@ import React from 'react'
 
 import { MaterialUiGroupCheckBox } from 'material-ui-group-checkbox'
 
-const options = [
+const items = [
   {
     id: 1,
     name: "User Manager",
@@ -54,7 +54,7 @@ class App extends React.Component {
 
   render() {
     const { value } = this.state
-    const fieldData = {
+    const options = {
       name: 'permissions',
       label: 'Permissions',
       error: '',
@@ -66,7 +66,7 @@ class App extends React.Component {
     }
 
     return (
-      <MaterialUiGroupCheckBox options={options} fieldData={fieldData} handleInputChange={this.handleInputChange} />
+      <MaterialUiGroupCheckBox items={items} options={options} handleInputChange={this.handleInputChange} />
     )
   }
 }
