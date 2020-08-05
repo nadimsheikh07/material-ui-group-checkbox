@@ -34,7 +34,7 @@ class MaterialUiGroupCheckBox extends React.Component {
     this.state = {
       items: [],
       selectedItems: [],
-      expanded: ''
+      expanded: null
     }
   }
 
@@ -81,8 +81,13 @@ class MaterialUiGroupCheckBox extends React.Component {
     return element[options.getChildOptionValue]
   }
 
-  accordionHandleChange = (expanded) => {
-    this.setState({ expanded: expanded })
+  accordionHandleChange = (value) => {
+    const { expanded } = this.state
+    if (expanded === value) {
+      this.setState({ expanded: null })
+    } else {
+      this.setState({ expanded: value })
+    }
   }
 
   render() {
