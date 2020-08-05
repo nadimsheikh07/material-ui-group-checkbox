@@ -8,23 +8,13 @@ import FormHelperText from '@material-ui/core/FormHelperText'
 import Accordion from '@material-ui/core/Accordion'
 import AccordionDetails from '@material-ui/core/AccordionDetails'
 import AccordionSummary from '@material-ui/core/AccordionSummary'
-import Typography from '@material-ui/core/Typography'
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
 import { withStyles } from '@material-ui/core/styles'
 import { Grid } from '@material-ui/core'
 
-const styles = (theme) => ({
+const styles = () => ({
   root: {
     width: '100%'
-  },
-  heading: {
-    fontSize: theme.typography.pxToRem(15),
-    flexBasis: '33.33%',
-    flexShrink: 0
-  },
-  secondaryHeading: {
-    fontSize: theme.typography.pxToRem(15),
-    color: theme.palette.text.secondary
   }
 })
 
@@ -33,8 +23,7 @@ class MaterialUiGroupCheckBox extends React.Component {
     super(props)
     this.state = {
       items: [],
-      selectedItems: [],
-      expanded: null
+      selectedItems: []
     }
   }
 
@@ -49,6 +38,37 @@ class MaterialUiGroupCheckBox extends React.Component {
       const index = selectedItems.indexOf(value)
       if (index >= 0) {
         selectedItems.splice(index, 1)
+      }
+    }
+
+    const event = {
+      target: {
+        name: options.name,
+        value: selectedItems
+      }
+    }
+    this.props.handleInputChange(event)
+  }
+
+  handleCheckAll = (e, value) => {
+    e.persist()
+    const { options } = this.props
+    const selectedItems = options.value
+
+    if (e.target.checked) {
+      if (value.children) {
+        value.children.forEach((element) => {
+          selectedItems.push(this.getChildValue(element))
+        })
+      }
+    } else {
+      if (value.children) {
+        value.children.forEach((element) => {
+          const index = selectedItems.indexOf(this.getChildValue(element))
+          if (index >= 0) {
+            selectedItems.splice(index, 1)
+          }
+        })
       }
     }
 
@@ -81,18 +101,8 @@ class MaterialUiGroupCheckBox extends React.Component {
     return element[options.getChildOptionValue]
   }
 
-  accordionHandleChange = (value) => {
-    const { expanded } = this.state
-    if (expanded === value) {
-      this.setState({ expanded: null })
-    } else {
-      this.setState({ expanded: value })
-    }
-  }
-
   render() {
-    const { options, classes, items } = this.props
-    const { expanded } = this.state
+    const { options, items } = this.props
 
     return (
       <React.Fragment>
@@ -102,21 +112,22 @@ class MaterialUiGroupCheckBox extends React.Component {
             items.map((option) => {
               const mainLabel = this.getLabel(option)
               return (
-                <Accordion
-                  key={`${options.name}Accordion${mainLabel}`}
-                  expanded={expanded === this.getValue(option)}
-                  onChange={() =>
-                    this.accordionHandleChange(this.getValue(option))
-                  }
-                >
+                <Accordion key={`${options.name}Accordion${mainLabel}`}>
                   <AccordionSummary
                     expandIcon={<ExpandMoreIcon />}
                     aria-controls={mainLabel}
                     id={this.getValue(option)}
                   >
-                    <Typography className={classes.heading}>
-                      {mainLabel}
-                    </Typography>
+                    <FormControlLabel
+                      onClick={(event) => event.stopPropagation()}
+                      onFocus={(event) => event.stopPropagation()}
+                      control={
+                        <Checkbox
+                          onChange={(e) => this.handleCheckAll(e, option)}
+                        />
+                      }
+                      label={mainLabel}
+                    />
                   </AccordionSummary>
                   <AccordionDetails>
                     <FormGroup>
