@@ -58,6 +58,10 @@ class MaterialUiGroupCheckBox extends React.Component {
     if (e.target.checked) {
       if (value.children) {
         value.children.forEach((element) => {
+          const index = selectedItems.indexOf(this.getChildValue(element))
+          if (index >= 0) {
+            selectedItems.splice(index, 1)
+          }
           selectedItems.push(this.getChildValue(element))
         })
       }
