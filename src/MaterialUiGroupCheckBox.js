@@ -107,7 +107,6 @@ class MaterialUiGroupCheckBox extends React.Component {
 
   render() {
     const { options, items } = this.props
-
     return (
       <React.Fragment>
         <FormControl error={!!options.error} fullWidth>
@@ -115,6 +114,17 @@ class MaterialUiGroupCheckBox extends React.Component {
           {items &&
             items.map((option) => {
               const mainLabel = this.getLabel(option)
+              let parentChecked = false
+              const childrenIds = option.children.map(
+                (childrenOption) => childrenOption[options.getChildOptionValue]
+              )
+
+              childrenIds.forEach((element) => {
+                if (options.value.includes(element)) {
+                  parentChecked = true
+                }
+              })
+
               return (
                 <Accordion key={`${options.name}Accordion${mainLabel}`}>
                   <AccordionSummary
@@ -127,6 +137,7 @@ class MaterialUiGroupCheckBox extends React.Component {
                       onFocus={(event) => event.stopPropagation()}
                       control={
                         <Checkbox
+                          checked={parentChecked}
                           onChange={(e) => this.handleCheckAll(e, option)}
                         />
                       }
